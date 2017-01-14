@@ -24,7 +24,7 @@ country_to_continent = {
   'Brazil': 'South_America',
   'Brunei': 'Asia',
   'Bulgaria': 'Europe',
-  'Burkina': 'Africa',
+  'Burkina Faso': 'Africa',
   'Burma (Myanmar)': 'Asia',
   'Burundi': 'Africa',
   'Cambodia': 'Asia',
