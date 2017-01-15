@@ -49,57 +49,49 @@
 <br><br>
 
    <div class="container">
-     <div class="starter-template">
-       <h2 class="lead">Share your Kiva username so we can use your loan history to pick the loans that will most interest you.</h2>
-     </div>
-
-       <div class = "container">
-
-         <form  action="/output" method="GET">
-           <div class="form-group">
-             <label for="user_name">User Name:</label>
-             <input type="text" id="user_name" name='user_name' placeholder="e.g. ">
-           </div>
-
-           <div>
-             <button type="submit" class="btn btn-default btn-lg">Find me some loans!</button>
-           </div>
-         </form>
-       </div>
-       <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-       <script src="static/js/bootstrap.min.js"></script>
-
-     </div> <!-- /.container-->
 
      <div class="container">
        <div class="starter-template">
-	   <h3><br>Best Loans:</h3>
-         <p class="lead">Based on your loan history, these are the loans that we think will most interest you.</p>
+       <h3><br>Details on Your Past Loans:</h3>
+       <p class="lead">
+       <b>Countries:</b> {{ user_loans['user_countries'] }} <br>
+       <b>Sectors:</b> {{ user_loans['user_sectors'] }} <br>
+       <b>Tags:</b> {{ user_loans['user_tags'] }} <br>
+       <b>Themes:</b> {{ user_loans['user_themes'] }} <br><br>
+       Based on your loan history, these are the loans that we think will most interest you.</p>
        </div>
 
 
 <table class="table table-hover">
 <tr><th></th>
-	<th>Name of Borrower</th>
-	<th>Gender</th>
-	<th>Country</th>
-	<th>Continent</th>
-	<th>Sector</th>
-	<th>Description</th></tr>
+  <th>Loan Similarity<sup><a href="#fn1" id="ref1">1</a></sup></th>
+    <th>Name of Borrower</th>
+    <th>Gender</th>
+    <th>Country</th>
+    <th>Continent</th>
+    <th>Sector</th>
+    <th>Description</th></tr>
 {% for loan in best_loans %}
 <tr><td><a href={{ loan['loan_link'] }}>
         <img src={{ loan['loan_img'] }}
              alt={{ loan['loan_id'] }} style="width:200px;"><a></td>
-    <td>{{ loan['borrower_name']}}</td>
-    <td>{{ loan['gender']}}</td>
-    <td>{{ loan['country']}}</td>
-	<td>{{ loan['continent']}}</td>
-	<td>{{ loan['sector']}}</td>
-	<td> {{ loan['text'] }}</td></tr>
+    <td>{{ loan['similarity'] }}</td>
+    <td>{{ loan['borrower_name'] }}</td>
+    <td>{{ loan['gender'] }}</td>
+    <td>{{ loan['country'] }}</td>
+    <td>{{ loan['continent'] }}</td>
+    <td>{{ loan['sector'] }}</td>
+    <td> {{ loan['text'] }}</td></tr>
 {% endfor %}
 </table>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="static/js/bootstrap.min.js"></script>
+
+<h5> <a href="index">Try another user. ↩</a></h5>
+
+<sup id="fn1">1. Loan Similarity is calculated as the number of elements (countries, continents,
+  sectors, tags, and themes_ in common over the total number of elements in the loans.
+  <a href="#ref1" title="Jump back to the top.">↩</a></sup>
 
    </div><!-- /.container -->
 
