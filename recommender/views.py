@@ -46,7 +46,7 @@ def set_to_string(input_set):
 
 @app.route('/best_loans')
 def best_loans():
-  username = request.args.get('username')
+  username = str(request.args.get('username'))
   number_displayed = 10
   print('Username %s' % username)
   try:
