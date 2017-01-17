@@ -5,13 +5,13 @@ import pickle
 from pprint import pprint
 import requests
 
+from config import PATH
 from country import country_to_continent
 from utils import eval_string, get_date
 
 FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.INFO)
 
-PATH = 'data/'
 MAX_LOANS = 2000
 
 # Extract a set of elements that we care about

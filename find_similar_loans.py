@@ -2,10 +2,9 @@ import pandas as pd
 import pickle
 import requests
 
+from config import PATH
 from country import country_to_continent
 from utils import eval_string
-
-path = 'data/'
 
 def get_user_loan_elements(user):
     url = 'http://api.kivaws.org/v1/lenders/{user}/loans.json'.format(user=user)
@@ -132,7 +131,7 @@ def get_loan_details_from_api(loans_to_display):
 
 def main(user, number_displayed):
     # Get loan elements
-    loan_elements = pickle.load( open( "%sloan_elements.pickle" % path, "rb" ) )
+    loan_elements = pickle.load( open( "%sloan_elements.pickle" % PATH, "rb" ) )
 
     #user = 'brianna9306'
     user_loan_elements = get_user_loan_elements(user)
