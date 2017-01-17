@@ -58,13 +58,13 @@
        <b>Sectors:</b> {{ user_loans['user_sectors'] }} <br>
        <b>Tags:</b> {{ user_loans['user_tags'] }} <br>
        <b>Themes:</b> {{ user_loans['user_themes'] }} <br><br>
-       Based on your loan history, these are the loans that we think will most interest you.</p>
+       Based on your loan history<sup><a href="#fn1" id="ref1">1</a></sup>, these are the loans that we think will most interest you.</p>
        </div>
 
 
 <table class="table table-hover">
 <tr><th></th>
-  <th>Loan Similarity<sup><a href="#fn1" id="ref1">1</a></sup></th>
+  <th>Loan Similarity<sup><a href="#fn2" id="ref2">2</a></sup></th>
     <th>Name of Borrower</th>
     <th>Gender</th>
     <th>Country</th>
@@ -89,9 +89,11 @@
 
 <h5> <a href="index">Try another user. ↩</a></h5>
 
-<sup id="fn1">1. Loan Similarity is calculated as the number of elements (countries, continents,
-  sectors, tags, and themes_ in common over the total number of elements in the loans.
+<sup id="fn1">1. If you've donated to more than 10 loans, we'll only consider the 10 most recent.
   <a href="#ref1" title="Jump back to the top.">↩</a></sup>
+<sup id="fn2">2. Loan Similarity is calculated as the number of elements (countries, continents,
+  sectors, tags, and themes_ in common over the total number of elements in the loans.
+  <a href="#ref2" title="Jump back to the top.">↩</a></sup>
 
    </div><!-- /.container -->
 

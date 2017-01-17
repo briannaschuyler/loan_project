@@ -11,6 +11,10 @@ def get_user_loan_elements(user):
     response = requests.get(url)
     lender = eval(response.content.replace('false', 'False').replace('true', 'True'))
 
+    # To speed up computing time, if a user has a ton of loans only use the 10 most recent.
+    if len(lender['loans']) > 10:
+        lender['loans'] = lender['loans'][-10:]
+
     # Make sets of each of these important categories of the user's loans
     countries, continents, sectors, tags, themes = set(), set(), set(), set(), set()
 
@@ -112,8 +116,8 @@ def get_loan_details_from_api(loans_to_display):
         country = loan_details[loan_id]['location']['country']
         continent = country_to_continent.get(country, 'Unknown')
         sector = loan_details[loan_id]['sector']
-        text = loan_details[loan_id]['description']['texts']['en']
-
+        text = loan_details[loan_id]['description']['texts']['en'].\
+                 replace('<br \/>', '\n\n').replace('\u2019', "'")
         # Send details to website to display
         loan_details_to_display.append({'loan_id': loan_id,
                                         'similarity': get_percent(loan_sim[1]),
