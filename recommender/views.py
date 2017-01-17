@@ -4,8 +4,6 @@ import pickle
 import find_similar_loans
 from recommender import app
 
-path = '/Users/brianna/Dropbox/data_project/loan_project/data/'
-
 @app.route('/')
 @app.route('/index')
 def index():

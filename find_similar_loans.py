@@ -5,7 +5,7 @@ import requests
 from country import country_to_continent
 from utils import eval_string
 
-path = '/Users/brianna/Dropbox/data_project/loan_project/data/'
+path = 'data/'
 
 def get_user_loan_elements(user):
     url = 'http://api.kivaws.org/v1/lenders/{user}/loans.json'.format(user=user)

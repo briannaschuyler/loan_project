@@ -11,7 +11,7 @@ from utils import eval_string, get_date
 FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.INFO)
 
-PATH = '/Users/brianna/Dropbox/data_project/loan_project/data/'
+PATH = 'data/'
 MAX_LOANS = 2000
 
 # Extract a set of elements that we care about
