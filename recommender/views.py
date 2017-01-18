@@ -13,23 +13,23 @@ def index():
                          user = user)
 
 def redirect_message():
-  return '''
-<b>This username does not exist in the Kiva database or is not public!</b> <br><br>
-
-To make your account public, go to <a href="https://www.kiva.org/settings/account" target="_blank">Kiva Account Settings</a>.<br>
-(Make sure you're signed in.)<br>
-At the bottom of the page, click "Make my page and loans public."<br>
-More details can be found <a href="http://pages.kiva.org/kivablog/2013/08/08/your-kiva-account-settings-just-got-that-much-simpler">here</a>.<br><br>
-
-Once you're done, return to the <a href="index">Kiva Loan Recommender</a> to find the loans you'll likely be interested in!
-'''
+  username_DNE = "<b>This username does not exist in the Kiva database or is not public!</b> <br><br>"
+  return username_DNE + find_username_message()
 
 def find_username_message():
   return '''
-To find your username (and make your account public), go to <a href="https://www.kiva.org/settings/account" target="_blank">Kiva Account Settings</a>.<br>
-(Make sure you're signed in.)<br>
-At the bottom of the page, click "Make my page and loans public."<br>
-More details can be found <a href="http://pages.kiva.org/kivablog/2013/08/08/your-kiva-account-settings-just-got-that-much-simpler">here</a>.<br><br>
+To find your username (and make your account public), go to <a href="https://www.kiva.org/settings/account"
+target="_blank">Kiva Account Settings</a>.<br><br>
+
+(Make sure you're signed in.)<br><br>
+Your username is listed in the "My Lender Profile" section.
+
+<img src="static/kiva_username.png" alt="Kiva Username Location"><br><br>
+
+At the bottom of the page, click "Make my page and loans public."<br><br>
+
+More details can be found <a href="http://pages.kiva.org/kivablog/2013/08/08/your-kiva-account-settings-just-got-that-much-simpler">
+here</a>.<br><br>
 
 Once you're done, return to the <a href="index">Kiva Loan Recommender</a> to find the loans you'll likely be interested in!
 '''
