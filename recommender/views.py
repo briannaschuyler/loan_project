@@ -41,7 +41,8 @@ def find_username():
 def set_to_string(input_set):
   output = ''
   for s in input_set:
-    output = output + s + ', '
+    if s is not None:
+      output = output + s + ', '
   return output[:-2]
 
 @app.route('/best_loans')
