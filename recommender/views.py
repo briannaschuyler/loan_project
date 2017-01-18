@@ -58,6 +58,6 @@ def best_loans():
   # If username is in the system, return elements of user's previous loans and a list of similar
   # loans, from best to worst
   for element in user_loans:
-      user_loans[element] = set_to_string(user_loans[element])
+    user_loans[element] = set_to_string(user_loans[element])
 
   return render_template("best_loans.html", user_loans=user_loans, best_loans=best_loans)

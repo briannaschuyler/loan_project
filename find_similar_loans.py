@@ -75,6 +75,9 @@ def get_loans_to_display(loan_similarity, number_displayed):
 def get_percent(x):
     return str('%s%%' % int(round(x * 100)))
 
+def to_unicode(x):
+    return x.decode('unicode-escape')
+
 def get_loan_details_from_api(loans_to_display):
     url = 'http://api.kivaws.org/v1/loans/'
     for loan_sim in loans_to_display:
@@ -106,18 +109,19 @@ def get_loan_details_from_api(loans_to_display):
             loan_img = 'static/kiva.png'
 
         # Borrower details
-        borrower_name =  loan_details[loan_id]['borrowers'][0]['first_name']
+        borrower_name = to_unicode(loan_details[loan_id]['borrowers'][0]['first_name'])
         if len(loan_details[loan_id]['borrowers']) > 1:
-            gender = ''
+            gender = 'Group'
         else:
             gender = loan_details[loan_id]['borrowers'][0]['gender']
 
         # Loan details
-        country = loan_details[loan_id]['location']['country']
-        continent = country_to_continent.get(country, 'Unknown')
-        sector = loan_details[loan_id]['sector']
-        text = loan_details[loan_id]['description']['texts']['en'].\
-                 replace('<br \/>', '\n\n').replace('\u2019', "'")
+        country = to_unicode(loan_details[loan_id]['location']['country'])
+        continent = to_unicode(country_to_continent.get(country, 'Unknown'))
+        sector = to_unicode(loan_details[loan_id]['sector'])
+        text = to_unicode(loan_details[loan_id]['description']['texts']['en']).\
+                 replace('<br \/>', '\n\n')
+
         # Send details to website to display
         loan_details_to_display.append({'loan_id': loan_id,
                                         'similarity': get_percent(loan_sim[1]),
