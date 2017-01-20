@@ -6,33 +6,52 @@ from config import PATH
 from country import country_to_continent
 from utils import eval_string
 
+###########################################################################
+# Get all of the elements of the specified user's loans
+###########################################################################
+
+def add_element(category, element):
+    if element not in category:
+        category[element] = 1
+    else:
+        category[element] += 1
+
+    return category
+
 def get_user_loan_elements(user):
     url = 'http://api.kivaws.org/v1/lenders/{user}/loans.json'.format(user=user)
     response = requests.get(url)
     lender = eval(response.content.replace('false', 'False').replace('true', 'True'))
 
     # To speed up computing time, if a user has a ton of loans only use the 10 most recent.
-    if len(lender['loans']) > 10:
-        lender['loans'] = lender['loans'][-10:]
+    if len(lender['loans']) > 15:
+        lender['loans'] = lender['loans'][-15:]
 
-    # Make sets of each of these important categories of the user's loans
-    countries, continents, sectors, tags, themes = set(), set(), set(), set(), set()
+    # Make dictionaries of each of these important categories of the user's loans,
+    # where the key is the category (ex. "Woman Owned Biz") and the value is the number
+    # of times it's appeared in this user's loans
+    countries, continents, sectors, tags, themes = {}, {}, {}, {}, {}
 
     for loan in range(len(lender['loans'])):
         if 'country' in lender['loans'][loan]['location']:
-            countries.update([lender['loans'][loan]['location']['country']])
-            continents.update([country_to_continent.get(lender['loans'][loan]['location']['country'])])
+            country = lender['loans'][loan]['location']['country']
+            countries = add_element(countries, country)
+            continent = country_to_continent.get(country, 'Unknown')
+            continents = add_element(continents, continent)
 
         if 'sector'in lender['loans'][loan]:
-            sectors.update([lender['loans'][loan]['sector']])
+            sector = lender['loans'][loan]['sector']
+            sectors = add_element(sectors, sector)
 
         if 'tags' in lender['loans'][loan]:
             loan_tags = [k['name'].strip('#') for k in lender['loans'][loan]['tags']]
-            tags.update(loan_tags)
+            for t in loan_tags:
+                tags = add_element(tags, t)
 
         if 'themes' in lender['loans'][loan]:
             loan_themes = lender['loans'][loan]['themes']
-            themes.update(loan_themes)
+            for th in loan_themes:
+                themes = add_element(themes, th)
 
         user_loan_elements = {'user_countries': countries,
                               'user_continents': continents,
@@ -42,15 +61,27 @@ def get_user_loan_elements(user):
 
     return user_loan_elements
 
-def get_user_loan_elements_set(user_loan_elements):
+def get_user_loan_elements_and_counts(user_loan_elements):
     # Combine elements from each category into a single set to calculate similarity
-    user_loan_elements_set = set()
-    for el in user_loan_elements:
-        user_loan_elements_set.update(user_loan_elements[el])
+    user_loan_elements_set = {}
+    for category in user_loan_elements:
+        for element in user_loan_elements[category]:
+            user_loan_elements_set.update(user_loan_elements[category])
     return user_loan_elements_set
 
+def get_user_loan_elements_categories_only(user_loan_elements):
+    # Combine elements from each category into a single set to calculate similarity
+    user_loan_elements_set = set()
+    for category in user_loan_elements:
+        user_loan_elements_set.update(user_loan_elements[category])
+    return user_loan_elements_set
+
+###########################################################################
+# Jaccard distance - intersection of two sets over the union of the sets
+###########################################################################
+
 def jaccard_distance(x, user_loan_elements):
-    user_loan_elements_set = get_user_loan_elements_set(user_loan_elements)
+    user_loan_elements_set = get_user_loan_elements_categories_only(user_loan_elements)
     intersection = len(set.intersection(x, user_loan_elements_set))
     union = len(set.union(x, user_loan_elements_set))
     if union > 0:
@@ -58,9 +89,50 @@ def jaccard_distance(x, user_loan_elements):
     else:
         return 0
 
+###########################################################################
+# Dot Product Similarity - similarity weighted by instance of each category
+###########################################################################
+
+def get_max_instance(user_loan_elements, category):
+    # Get the maximm number of instances of a particular category (country, continent, sector)
+    instances = {v: k for k,v in user_loan_elements[category].iteritems()}
+    return max(instances)
+
+def get_sum_of_instances(user_loan_elements, category):
+    # Get the maximm number of instances of a particular category (country, continent, sector)
+    total_instances = 0
+    for k in user_loan_elements[category]:
+        total_instances += user_loan_elements[category][k]
+    return total_instances
+
+def max_dp_similarity(user_loan_elements):
+    # The maximum "similarity score" would be:
+    #    - a match with the most common country, continent, and sector
+    #    - all tags and themes shared
+    dp_max = 0
+    for category in ['user_countries', 'user_continents', 'user_sectors']:
+        dp_max += get_max_instance(user_loan_elements, category)
+    for category in ['user_tags', 'user_themes']:
+        dp_max += get_sum_of_instances(user_loan_elements, category)
+    return dp_max
+
+def dp_similarity(candidate_loan_elements, user_loan_elements):
+    user_loan_elements_set = get_user_loan_elements_and_counts(user_loan_elements)
+    candidate_loan_elements = list(candidate_loan_elements)
+
+    dot_product = sum([user_loan_elements_set.get(k, 0) for k in candidate_loan_elements])
+
+    # Normalize by the maximum dot product of the most ideal loan (which is not the same as sharing
+    # every element since a loan can in theory share all tags and themes but can only have one
+    # country, continent, and sector
+    return dot_product * 1.0 / max_dp_similarity(user_loan_elements)
+
+###########################################################################
+# Find and display loans
+###########################################################################
+
 def get_loans_to_display(loan_similarity, number_displayed):
     # Return a list of tuples (loand_id, similarity_score) sorted by similarity
-    number_displayed = 10
     if number_displayed > len(loan_similarity):
         number_displayed = len(loan_similarity)
 
@@ -145,10 +217,12 @@ def main(user, number_displayed):
     user_loan_elements = get_user_loan_elements(user)
 
     # Find the similarity of every loan with the user's loans
-    loan_similarity = {jaccard_distance(v['elements'], user_loan_elements): k for k, v in loan_elements.iteritems()}
+    similarity_scores = {k: jaccard_distance(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
+    #similarity_scores = {k: dp_similarity(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
 
-    # Pick the currently active loans with the highest similarity to display
-    loans_to_display = get_loans_to_display(loan_similarity, number_displayed)
+    # Get list of tuples (loan_id, similarity_score) sorted by similarity score
+    loans_to_display = sorted(similarity_scores.items(), key=lambda tup: tup[1], reverse=True)
+    loans_to_display = loans_to_display[:number_displayed]
 
     # Find details on the loans to be displayed
     loan_details_to_display = get_loan_details_from_api(loans_to_display)
