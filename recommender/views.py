@@ -22,7 +22,7 @@ To find your username (and make your account public), go to <a href="https://www
 target="_blank">Kiva Account Settings</a>.<br><br>
 
 (Make sure you're signed in.)<br><br>
-Your username is listed in the "My Lender Profile" section.
+Your username is listed in the "My Lender Profile" section.<br>
 
 <img src="static/kiva_username.png" alt="Kiva Username Location"><br><br>
 
