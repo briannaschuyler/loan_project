@@ -49,10 +49,10 @@ def set_to_string(input_set):
 def best_loans():
   username = str(request.args.get('username'))
   number_displayed = 15
-  #try:
-  user_loans, best_loans = find_similar_loans.main(username, number_displayed)
-  #except:
-  #  return redirect_message()
+  try:
+    user_loans, best_loans = find_similar_loans.main(username, number_displayed)
+  except:
+    return redirect_message()
 
   # If username is in the system, return elements of user's previous loans and a list of similar
   # loans, from best to worst
