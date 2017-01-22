@@ -1,8 +1,11 @@
 from flask import render_template, request
+import logging
 import pickle
 
 import find_similar_loans
 from recommender import app
+
+logging.basicConfig(filename='usage.log', format='%(asctime)s %(message)s', level=logging.INFO)
 
 @app.route('/')
 @app.route('/index')
@@ -48,6 +51,7 @@ def set_to_string(input_set):
 @app.route('/best_loans')
 def best_loans():
   username = str(request.args.get('username'))
+  logging.info('Username: %s' % username)
   number_displayed = 15
   try:
     user_loans, best_loans = find_similar_loans.main(username, number_displayed)

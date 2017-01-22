@@ -1,0 +1,66 @@
+INFO:werkzeug: * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 296-837-020
+INFO:werkzeug:73.92.167.79 - - [21/Jan/2017 17:29:46] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:73.92.167.79 - - [21/Jan/2017 17:29:46] "GET /starter-template.css HTTP/1.1" 404 -
+INFO:werkzeug:73.92.167.79 - - [21/Jan/2017 17:29:46] "GET /assets/js/ie-emulation-modes-warning.js HTTP/1.1" 404 -
+INFO:werkzeug:73.92.167.79 - - [21/Jan/2017 17:29:46] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+INFO:root:Username: brianna9306
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): api.kivaws.org
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): api.kivaws.org
+INFO:werkzeug:73.92.167.79 - - [21/Jan/2017 17:29:53] "GET /best_loans?username=brianna9306 HTTP/1.1" 200 -
+INFO:werkzeug:73.92.167.79 - - [21/Jan/2017 17:29:53] "GET /starter-template.css HTTP/1.1" 404 -
+INFO:werkzeug:73.92.167.79 - - [21/Jan/2017 17:29:53] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+INFO:werkzeug:73.92.167.79 - - [21/Jan/2017 17:29:53] "GET /assets/js/ie-emulation-modes-warning.js HTTP/1.1" 404 -
+INFO:werkzeug:73.92.167.79 - - [21/Jan/2017 17:29:53] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+INFO:werkzeug: * Detected change in '/home/ubuntu/loan_project/recommender/views.py', reloading
+INFO:werkzeug: * Restarting with stat
+2017-01-21 17:32:02,467  * Debugger is active!
+2017-01-21 17:32:02,467  * Debugger pin code: 296-837-020
+2017-01-21 17:32:15,826 73.92.167.79 - - [21/Jan/2017 17:32:15] "GET / HTTP/1.1" 200 -
+2017-01-21 17:32:15,907 73.92.167.79 - - [21/Jan/2017 17:32:15] "GET /static/css/bootstrap.min.css HTTP/1.1" 304 -
+2017-01-21 17:32:15,908 73.92.167.79 - - [21/Jan/2017 17:32:15] "GET /static/js/bootstrap.min.js HTTP/1.1" 304 -
+2017-01-21 17:32:15,910 73.92.167.79 - - [21/Jan/2017 17:32:15] "GET /assets/js/ie-emulation-modes-warning.js HTTP/1.1" 404 -
+2017-01-21 17:32:15,910 73.92.167.79 - - [21/Jan/2017 17:32:15] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+2017-01-21 17:32:15,911 73.92.167.79 - - [21/Jan/2017 17:32:15] "GET /starter-template.css HTTP/1.1" 404 -
+2017-01-21 17:32:16,026 73.92.167.79 - - [21/Jan/2017 17:32:16] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+2017-01-21 17:32:16,131 73.92.167.79 - - [21/Jan/2017 17:32:16] "GET /static/js/bootstrap.min.js HTTP/1.1" 304 -
+2017-01-21 17:32:17,846 Username: brianna9306
+2017-01-21 17:32:17,982 Starting new HTTP connection (1): api.kivaws.org
+2017-01-21 17:32:18,203 Starting new HTTP connection (1): api.kivaws.org
+2017-01-21 17:32:18,523 73.92.167.79 - - [21/Jan/2017 17:32:18] "GET /best_loans?username=brianna9306 HTTP/1.1" 200 -
+2017-01-21 17:32:18,769 73.92.167.79 - - [21/Jan/2017 17:32:18] "GET /starter-template.css HTTP/1.1" 404 -
+2017-01-21 17:32:18,770 73.92.167.79 - - [21/Jan/2017 17:32:18] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+2017-01-21 17:32:18,771 73.92.167.79 - - [21/Jan/2017 17:32:18] "GET /assets/js/ie-emulation-modes-warning.js HTTP/1.1" 404 -
+2017-01-21 17:32:24,685 73.92.167.79 - - [21/Jan/2017 17:32:24] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+2017-01-21 17:32:54,579 73.92.167.79 - - [21/Jan/2017 17:32:54] "GET / HTTP/1.1" 200 -
+2017-01-21 17:32:54,646 73.92.167.79 - - [21/Jan/2017 17:32:54] "GET /static/css/bootstrap.min.css HTTP/1.1" 304 -
+2017-01-21 17:32:54,647 73.92.167.79 - - [21/Jan/2017 17:32:54] "GET /static/js/bootstrap.min.js HTTP/1.1" 304 -
+2017-01-21 17:32:54,649 73.92.167.79 - - [21/Jan/2017 17:32:54] "GET /starter-template.css HTTP/1.1" 404 -
+2017-01-21 17:32:54,649 73.92.167.79 - - [21/Jan/2017 17:32:54] "GET /assets/js/ie-emulation-modes-warning.js HTTP/1.1" 404 -
+2017-01-21 17:32:54,651 73.92.167.79 - - [21/Jan/2017 17:32:54] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+2017-01-21 17:32:54,758 73.92.167.79 - - [21/Jan/2017 17:32:54] "GET /static/js/bootstrap.min.js HTTP/1.1" 304 -
+2017-01-21 17:33:01,020 Username: jackie2635
+2017-01-21 17:33:01,150 Starting new HTTP connection (1): api.kivaws.org
+2017-01-21 17:33:01,365 Starting new HTTP connection (1): api.kivaws.org
+2017-01-21 17:33:01,718 73.92.167.79 - - [21/Jan/2017 17:33:01] "GET /best_loans?username=jackie2635 HTTP/1.1" 200 -
+2017-01-21 17:33:01,836 73.92.167.79 - - [21/Jan/2017 17:33:01] "GET /starter-template.css HTTP/1.1" 404 -
+2017-01-21 17:33:01,839 73.92.167.79 - - [21/Jan/2017 17:33:01] "GET /assets/js/ie-emulation-modes-warning.js HTTP/1.1" 404 -
+2017-01-21 17:33:01,839 73.92.167.79 - - [21/Jan/2017 17:33:01] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+2017-01-21 17:33:01,925 73.92.167.79 - - [21/Jan/2017 17:33:01] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+2017-01-21 18:39:00,563 71.6.126.194 - - [21/Jan/2017 18:39:00] "GET / HTTP/1.1" 200 -
+2017-01-21 18:39:00,594 71.6.126.194 - - [21/Jan/2017 18:39:00] "GET /static/css/bootstrap.min.css HTTP/1.1" 200 -
+2017-01-21 18:39:00,643 71.6.126.194 - - [21/Jan/2017 18:39:00] "GET /starter-template.css HTTP/1.1" 404 -
+2017-01-21 18:39:00,644 71.6.126.194 - - [21/Jan/2017 18:39:00] "GET /assets/js/ie-emulation-modes-warning.js HTTP/1.1" 404 -
+2017-01-21 18:39:00,644 71.6.126.194 - - [21/Jan/2017 18:39:00] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+2017-01-21 18:39:00,646 71.6.126.194 - - [21/Jan/2017 18:39:00] "GET /static/js/bootstrap.min.js HTTP/1.1" 200 -
+2017-01-21 18:39:00,729 71.6.126.194 - - [21/Jan/2017 18:39:00] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
+2017-01-21 18:39:00,888 71.6.126.194 - - [21/Jan/2017 18:39:00] "GET /favicon.ico HTTP/1.1" 404 -
+2017-01-21 18:40:11,210 Username: monica5588
+2017-01-21 18:40:11,339 Starting new HTTP connection (1): api.kivaws.org
+2017-01-21 18:40:11,583 Starting new HTTP connection (1): api.kivaws.org
+2017-01-21 18:40:11,849 71.6.126.194 - - [21/Jan/2017 18:40:11] "GET /best_loans?username=monica5588 HTTP/1.1" 200 -
+2017-01-21 18:40:12,006 71.6.126.194 - - [21/Jan/2017 18:40:12] "GET /starter-template.css HTTP/1.1" 404 -
+2017-01-21 18:40:12,009 71.6.126.194 - - [21/Jan/2017 18:40:12] "GET /assets/js/ie-emulation-modes-warning.js HTTP/1.1" 404 -
+2017-01-21 18:40:12,009 71.6.126.194 - - [21/Jan/2017 18:40:12] "GET /assets/js/ie10-viewport-bug-workaround.js HTTP/1.1" 404 -
