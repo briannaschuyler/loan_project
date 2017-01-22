@@ -3,3 +3,4 @@ old_files/
 data/kiva_*
 data/loans_10k.csv
 *pyc
+usage.log
