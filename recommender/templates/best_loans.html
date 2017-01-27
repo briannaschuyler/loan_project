@@ -61,7 +61,7 @@
 
      <div class="container">
        <div class="starter-template">
-       <h3><br>Details on Your Past Loans:</h3>
+         <h3><br>Details on Your Past Loans (as {{ username }}):</h3>
        <p class="lead">
        <b>Countries:</b> {{ user_loans['user_countries'] }} <br>
        <b>Sectors:</b> {{ user_loans['user_sectors'] }} <br>
@@ -74,7 +74,7 @@
 <div class="col-sm-6 col-md-6 col-lg-6" id="container_plots" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
 
 <!--script>username='brianna9306'</script-->
-<script>username={{ username }}</script>
+<!--script>user_loans={{ user_loans }}</script-->
 <script src="../static/js/display.js"></script>
 
 <table class="table table-hover">

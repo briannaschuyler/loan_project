@@ -55,21 +55,22 @@ def best_loans():
   except:
     return redirect_message()
 
+  print(user_loans)
+
   # If username is in the system, return elements of user's previous loans and a list of similar
   # loans, from best to worst
-  for element in user_loans:
-    user_loans[element] = set_to_string(user_loans[element])
+ # for element in user_loans:
+ #   user_loans[element] = set_to_string(user_loans[element])
 
-  return render_template("best_loans.html", username=json.dumps(username), user_loans=user_loans, best_loans=best_loans)
+  return render_template("best_loans.html", user_loans=user_loans, best_loans=best_loans), json.dumps(user_loans)
 
 @app.route('/countries_pie')
 def countries_pie():
-    #username = str(request.args.get('username'))
-    countries_data = [
+  #username = str(request.args.get('username'))
+  countries_data = [
     { 'name': 'Microsoft Internet Explorer', 'y': 6, 'color': 'blue' },
     { 'name': 'Chrome', 'y': 10 , 'color': 'blue' },
     { 'name': 'Firefox', 'y': 1 , 'color': 'blue' }
     ]
-
-    return json.dumps([countries_data, 'Countries AYAYAY', username])
+  return json.dumps([countries_data, 'Countries'])
 
