@@ -2,6 +2,5 @@ old_files/
 .ipynb_checkpoints/
 data/kiva_*
 data/loans_10k.csv
-data/loan_elements.pickle
 *pyc
 usage.log
