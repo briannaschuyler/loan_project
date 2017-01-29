@@ -1,7 +1,9 @@
 import pandas as pd
 import pickle
+import random
 import requests
 
+import colors as pie_chart_colors
 from config import PATH
 from country import country_to_continent
 from utils import eval_string
@@ -17,6 +19,24 @@ def add_element(category, element):
         category[element] += 1
 
     return category
+
+def transform_for_pie_charts(user_loan_elements):
+    # Put this information in the way that highcharts pie charts wants it (ie. for each category
+    # make a list of dicts with keys = (name, y, color)
+    categories = {'user_countries': pie_chart_colors.oranges,
+                  'user_continents': pie_chart_colors.blues,
+                  'user_sectors': pie_chart_colors.reds,
+                  'user_tags': pie_chart_colors.greens,
+                  'user_themes': pie_chart_colors.purples}
+    user_loan_elements_transformed = {}
+    for category in categories:
+        colors = categories[category]
+        user_loan_elements_transformed[category] = []
+        for element in user_loan_elements[category]:
+            user_loan_elements_transformed[category].append({'name': element.replace(' ', '<br>').replace('_', '<br>'),
+                                                             'y': user_loan_elements[category][element],
+                                                             'color': random.choice(colors)})
+    return user_loan_elements_transformed
 
 def get_user_loan_elements(user):
     url = 'http://api.kivaws.org/v1/lenders/{user}/loans.json'.format(user=user)
@@ -227,4 +247,4 @@ def main(user, number_displayed):
     # Find details on the loans to be displayed
     loan_details_to_display = get_loan_details_from_api(loans_to_display)
 
-    return user_loan_elements, loan_details_to_display
+    return transform_for_pie_charts(user_loan_elements), loan_details_to_display

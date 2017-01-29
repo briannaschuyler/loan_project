@@ -7,7 +7,8 @@ import find_similar_loans
 from recommender import app
 from utils import set_to_string
 
-logging.basicConfig(filename='usage.log', format='%(asctime)s %(message)s', level=logging.INFO)
+#logging.basicConfig(filename='usage.log', format='%(asctime)s %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
 @app.route('/')
 @app.route('/index')
@@ -45,32 +46,32 @@ likely be interested in!
 def find_username():
   return find_username_message()
 
-@app.route('/best_loans')
-def best_loans():
-  username = str(request.args.get('username'))
+@app.route('/get_best_loans/<username>')
+def get_best_loans(username):
+  #username = str(request.args.get('username'))
   logging.info('Username: %s' % username)
+  logging.info('in get_best_loans')
   number_displayed = 15
-  try:
-    user_loans, best_loans = find_similar_loans.main(username, number_displayed)
-  except:
-    return redirect_message()
+  #try:
+  user_loans, best_loans = find_similar_loans.main(username, number_displayed)
+  #except:
+  #  return redirect_message()
 
-  print(user_loans)
+  print(user_loans.keys())
 
   # If username is in the system, return elements of user's previous loans and a list of similar
   # loans, from best to worst
- # for element in user_loans:
- #   user_loans[element] = set_to_string(user_loans[element])
+  # for element in user_loans:
+  #   user_loans[element] = set_to_string(user_loans[element])
 
-  return render_template("best_loans.html", user_loans=user_loans, best_loans=best_loans), json.dumps(user_loans)
+  return json.dumps([user_loans, best_loans])
 
-@app.route('/countries_pie')
-def countries_pie():
-  #username = str(request.args.get('username'))
+@app.route('/example_pie')
+def example_pie():
   countries_data = [
     { 'name': 'Microsoft Internet Explorer', 'y': 6, 'color': 'blue' },
     { 'name': 'Chrome', 'y': 10 , 'color': 'blue' },
     { 'name': 'Firefox', 'y': 1 , 'color': 'blue' }
     ]
-  return json.dumps([countries_data, 'Countries'])
+  return json.dumps([countries_data, 'Countries 1'])
 
