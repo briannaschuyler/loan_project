@@ -13,12 +13,11 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 @app.route('/')
 @app.route('/index')
 def index():
-  user = {'nickname': 'Miguel'}
   return render_template("index.html",
-                         title = "Kiva Loan Recommender",
-                         user = user)
+                         title = "Kiva Loan Recommender")
 
-def redirect_message():
+@app.route('/username_dne')
+def username_dne():
   username_DNE = "<b>This username does not exist in the Kiva database or is not public!</b> <br><br>"
   return username_DNE + find_username_message()
 
@@ -52,10 +51,10 @@ def get_best_loans(username):
   logging.info('Username: %s' % username)
   logging.info('in get_best_loans')
   number_displayed = 15
-  #try:
-  user_loans, best_loans = find_similar_loans.main(username, number_displayed)
-  #except:
-  #  return redirect_message()
+  try:
+    user_loans, best_loans = find_similar_loans.main(username, number_displayed)
+  except:
+    return
 
   print(user_loans.keys())
 
