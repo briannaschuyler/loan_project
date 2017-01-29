@@ -6,12 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
 
     <title>Kiva Loan Recommender</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
     <!-- Cod to plot in highcharts -->
     <link href="https://www.highcharts.com/highslide/highslide.css" rel="stylesheet" />
@@ -45,12 +47,13 @@
       </div>
     </div>
 
-	<br><br>
+    <br><br>
 
     <div class="container">
 
         <div class="starter-template">
-            <h2 class="lead">Share your Kiva username so we can use your loan history to pick the loans that will most interest you.</h2>
+            <h2 class="lead">Share your Kiva username so we can use your loan history to pick the
+                             loans that will most interest you.</h2>
         </div>
 
         <div class = "container">
@@ -63,20 +66,40 @@
 
             <div>
               <button onclick="sendData('username')"
-               class="btn btn-default btn-lg">Find me some loans!</button><br><br>
+               class="btn btn-primary btn-lg">Find me some loans!</button><br><br>
             </div>
-
+            <div>
+              <button onclick="findUsername()"
+               class="btn btn-default btn-md">Help me find my username.</button><br><br>
+            </div>
           </div>
         </div>
 
-          <a href="find_username">Help me find my username.</a>
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-
       <br><br>
+      <div id="username_dne">
+        <b>This username does not exist in the Kiva database or is not public!</b> <br><br>
+      </div>
+      <div id="find_username">
+        To find your username (and make your account public), go to
+        <a href="https://www.kiva.org/settings/account" target="_blank">Kiva Account Settings</a>.<br><br>
+        (Make sure you're signed in.)<br><br>
+        Your username is listed in the "My Lender Profile" section.<br>
+
+        <img src="static/kiva_username.png" alt="Kiva Username Location"><br><br>
+        At the bottom of the page, click "Make my page and loans public."<br><br>
+        More details can be found
+        <a href="http://pages.kiva.org/kivablog/2013/08/08/your-kiva-account-settings-just-got-that-much-simpler">
+        here</a>.<br><br>
+
+        Once you're done, return to the <a href="index">Kiva Loan Recommender</a> to find the loans you'll
+        likely be interested in!
+      </div>
+
       <div id="user_loans">
+        <h5> <a href="index">Try another user. ↩</a></h5>
         <h2>Your Previous Loans:</h2>
 
-		<div>
+        <div>
           <div class="col-sm-6 col-md-6 col-lg-4" id="countries_container"
             style="min-width: 300px; height: 200px; max-width: 600px; margin: 0 auto"></div>
 
@@ -92,41 +115,19 @@
           <div class="col-sm-6 col-md-6 col-lg-4" id="themes_container"
             style="min-width: 300px; height: 200px; max-width: 600px; margin: 0 auto"></div>
 
-		  <div class="col-sm-6 col-md-6 col-lg-4"
+          <div class="col-sm-6 col-md-6 col-lg-4"
             style="min-width: 300px; height: 200px; max-width: 600px; margin: 0 auto"><p></p></div>
 
-		</div>
+        </div>
 
-		<br><br>
-		<h2>Loans We Think You'll Like:</h2>
-        <div id="table_div"></div>
-<!--table width="100%" border="1" class="table table-hover">
-<tr><th></th>
-  <th>Loan Similarity<sup><a href="#fn2" id="ref2">2</a></sup></th>
-    <th>Name of Borrower</th>
-    <th>Gender</th>
-    <th>Country</th>
-    <th>Continent</th>
-    <th>Sector</th>
-    <th>Description</th></tr>
-</table>
+        <div class="col-sm-12 col-md-12 col-lg-2" style="height: 50px; margin: 0 auto"></div>
 
-          {% for loan in best_loas %}
-          <tr><td><a href={{ loan['loan_link'] }}>
-                  <img src={{ loan['loan_img'] }}
-                       alt={{ loan['loan_id'] }} style="width:200px;"><a></td>
-              <td>{{ loan['similarity'] }}</td>
-              <td>{{ loan['borrower_name'] }}</td>
-              <td>{{ loan['gender'] }}</td>
-              <td>{{ loan['country'] }}</td>
-              <td>{{ loan['continent'] }}</td>
-              <td>{{ loan['sector'] }}</td>
-              <td> {{ loan['text'] }}</td></tr>
-          {% endfor %}>
-          </table -->
+        <br><br>
+        <h2>Loans We Think You'll Like:</h2>
+        <div id="loan_table"></div>
           <h5> <a href="index">Try another user. ↩</a></h5>
 
-          <sup id="fn1">1. If you've donated to more than 10 loans, we'll only consider the 10 most recent.
+          <sup id="fn1">1. If you've donated to more than 50 loans, we'll only consider the 50 most recent.
             <a href="#ref1" title="Jump back to the top.">↩</a>
           </sup><br>
           <sup id="fn2">2. Loan Similarity is roughly calculated as the number of elements (countries,

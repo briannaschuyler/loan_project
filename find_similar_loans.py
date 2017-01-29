@@ -12,6 +12,10 @@ from utils import eval_string
 # Get all of the elements of the specified user's loans
 ###########################################################################
 
+# To speed up computing time, if a user has had more than 50 loans only take
+# the 50 most recent
+max_loans = 50
+
 def add_element(category, element):
     if element not in category:
         category[element] = 1
@@ -44,8 +48,8 @@ def get_user_loan_elements(user):
     lender = eval(response.content.replace('false', 'False').replace('true', 'True'))
 
     # To speed up computing time, if a user has a ton of loans only use the 10 most recent.
-    if len(lender['loans']) > 15:
-        lender['loans'] = lender['loans'][-15:]
+    if len(lender['loans']) > max_loans:
+        lender['loans'] = lender['loans'][-max_loans:]
 
     # Make dictionaries of each of these important categories of the user's loans,
     # where the key is the category (ex. "Woman Owned Biz") and the value is the number
@@ -237,8 +241,8 @@ def main(user, number_displayed):
     user_loan_elements = get_user_loan_elements(user)
 
     # Find the similarity of every loan with the user's loans
-    similarity_scores = {k: jaccard_distance(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
-    #similarity_scores = {k: dp_similarity(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
+    #similarity_scores = {k: jaccard_distance(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
+    similarity_scores = {k: dp_similarity(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
 
     # Get list of tuples (loan_id, similarity_score) sorted by similarity score
     loans_to_display = sorted(similarity_scores.items(), key=lambda tup: tup[1], reverse=True)
