@@ -1,93 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
- <head>
-   <meta charset="utf-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1">
-   <meta name="description" content="">
-   <meta name="author" content="">
-   <link rel="icon" href="../../favicon.ico">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-   <title>Kiva Loan Recommender</title>
+    <title>Kiva Loan Recommender</title>
 
-   <!-- Bootstrap core CSS -->
-   <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
-   <!-- Custom styles for this template -->
-   <link href="starter-template.css" rel="stylesheet">
+    <!-- Cod to plot in highcharts -->
+    <link href="https://www.highcharts.com/highslide/highslide.css" rel="stylesheet" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" src="https://code.highcharts.com/modules/exporting.js"></script>
 
-   <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-   <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-   <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
-   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-   <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script type="text/javascript" src="../static/js/pie_chart.js"></script>
 
-   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-   <!--[if lt IE 9]>
-     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-   <![endif]-->
- </head>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.y.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
 
- <body>
+  <body>
 
-   <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-     <div class="container">
-       <div class="navbar-header">
-         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-           <span class="sr-only">Toggle navigation</span>
-           <span class="icon-bar"></span>
-           <span class="icon-bar"></span>
-           <span class="icon-bar"></span>
-         </button>
-         <a class="navbar-brand" href="#">Kiva Loan Recommender</a>
-       </div>
-     </div>
-   </div>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Kiva Loan Recommender</a>
+        </div>
+      </div>
+    </div>
 
-<br><br>
+    <br><br>
 
-   <div class="container">
+    <div class="container">
 
-       <div class="starter-template">
-           <h2 class="lead">Share your Kiva username so we can use your loan history to pick the loans that will most interest you.</h2>
-       </div>
+        <div class="starter-template">
+            <h2 class="lead">Share your Kiva username so we can use your loan history to pick the
+                             loans that will most interest you.</h2>
+        </div>
 
-       <div class = "container">
+        <div class = "container">
 
-         <form  action="/best_loans" method="GET">
-           <div class="form-group">
-             <label for="username">User Name:</label>
-             <input type="text" id="username" name='username' placeholder="e.g. brianna9306">
-           </div>
+          <div>
+            <div class="form-group">
+              <label for="username">User Name:</label>
+              <input type="text" id="username" name='username' placeholder="e.g. brianna9306">
+            </div>
 
-           <div>
-             <button type="submit" class="btn btn-default btn-lg">Find me some loans!</button><br><br>
-           </div>
+            <div>
+              <button onclick="sendData('username')"
+               class="btn btn-primary btn-lg">Find me some loans!</button><br><br>
+            </div>
+            <div>
+              <button onclick="findUsername()"
+               class="btn btn-default btn-md">Help me find my username.</button><br><br>
+            </div>
+          </div>
+        </div>
 
-         </form>
-       </div>
+      <br><br>
+      <div id="username_dne">
+        <b>This username does not exist in the Kiva database or is not public!</b> <br><br>
+      </div>
+      <div id="find_username">
+        To find your username (and make your account public), go to
+        <a href="https://www.kiva.org/settings/account" target="_blank">Kiva Account Settings</a>.<br><br>
+        (Make sure you're signed in.)<br><br>
+        Your username is listed in the "My Lender Profile" section.<br>
 
-       <div>
-         <p> Comment: {{ comment }} </p>
-         <p> Input: <input type="text" ng-model="comment"></p>
+        <img src="static/kiva_username.png" alt="Kiva Username Location"><br><br>
+        At the bottom of the page, click "Make my page and loans public."<br><br>
+        More details can be found
+        <a href="http://pages.kiva.org/kivablog/2013/08/08/your-kiva-account-settings-just-got-that-much-simpler">
+        here</a>.<br><br>
+
+        Once you're done, return to the <a href="index">Kiva Loan Recommender</a> to find the loans you'll
+        likely be interested in!
       </div>
 
-       <div>
-         <a href="find_username">Help me find my username.</a>
-       <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-       <script src="static/js/bootstrap.min.js"></script>
+      <div id="user_loans">
+        <h5> <a href="index">Try another user. ↩</a></h5>
+        <h2>Your Previous Loans:</h2>
 
-     </div> <!-- /.container-->
+        <div>
+          <div class="col-sm-6 col-md-6 col-lg-4" id="countries_container"
+            style="min-width: 300px; height: 200px; max-width: 600px; margin: 0 auto"></div>
 
-   <!-- Bootstrap core JavaScript
-   ================================================== -->
-   <!-- Placed at the end of the document so the pages load faster -->
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+          <div class="col-sm-6 col-md-6 col-lg-4" id="continents_container"
+            style="min-width: 300px; height: 200px; max-width: 600px; margin: 0 auto"></div>
 
-<script src="static/js/bootstrap.min.js"></script>
+          <div class="col-sm-6 col-md-6 col-lg-4" id="sectors_container"
+            style="min-width: 300px; height: 200px; max-width: 600px; margin: 0 auto"></div>
 
-</body>
+          <div class="col-sm-6 col-md-6 col-lg-4" id="tags_container"
+            style="min-width: 300px; height: 200px; max-width: 600px; margin: 0 auto"></div>
+
+          <div class="col-sm-6 col-md-6 col-lg-4" id="themes_container"
+            style="min-width: 300px; height: 200px; max-width: 600px; margin: 0 auto"></div>
+
+          <div class="col-sm-6 col-md-6 col-lg-4"
+            style="min-width: 300px; height: 200px; max-width: 600px; margin: 0 auto"><p></p></div>
+
+        </div>
+
+        <div class="col-sm-12 col-md-12 col-lg-2" style="height: 50px; margin: 0 auto"></div>
+
+        <br><br>
+        <h2>Loans We Think You'll Like:</h2>
+        <div id="loan_table"></div>
+          <h5> <a href="index">Try another user. ↩</a></h5>
+
+          <sup id="fn1">1. If you've donated to more than 50 loans, we'll only consider the 50 most recent.
+            <a href="#ref1" title="Jump back to the top.">↩</a>
+          </sup><br>
+          <sup id="fn2">2. Loan Similarity is roughly calculated as the number of elements (countries,
+            continents, sectors, tags, and themes) in common over the total number of elements in the loans.
+            Elements that appear more frequently are weighted higher in the similarity score.
+            <a href="#ref2" title="Jump back to the top.">↩</a>
+          </sup>
+        </div>
+      </div>
+    </div> <!-- /.container-->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/display.js"></script>
+    <script type=text/javascript> $SCRIPT_ROOT = {{request.script_root|tojson|safe }}; </script>
+
+  </body>
 </html>
 

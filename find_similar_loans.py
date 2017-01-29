@@ -1,7 +1,9 @@
 import pandas as pd
 import pickle
+import random
 import requests
 
+import colors as pie_chart_colors
 from config import PATH
 from country import country_to_continent
 from utils import eval_string
@@ -9,6 +11,10 @@ from utils import eval_string
 ###########################################################################
 # Get all of the elements of the specified user's loans
 ###########################################################################
+
+# To speed up computing time, if a user has had more than 50 loans only take
+# the 50 most recent
+max_loans = 50
 
 def add_element(category, element):
     if element not in category:
@@ -18,14 +24,32 @@ def add_element(category, element):
 
     return category
 
+def transform_for_pie_charts(user_loan_elements):
+    # Put this information in the way that highcharts pie charts wants it (ie. for each category
+    # make a list of dicts with keys = (name, y, color)
+    categories = {'user_countries': pie_chart_colors.oranges,
+                  'user_continents': pie_chart_colors.blues,
+                  'user_sectors': pie_chart_colors.reds,
+                  'user_tags': pie_chart_colors.greens,
+                  'user_themes': pie_chart_colors.purples}
+    user_loan_elements_transformed = {}
+    for category in categories:
+        colors = categories[category]
+        user_loan_elements_transformed[category] = []
+        for element in user_loan_elements[category]:
+            user_loan_elements_transformed[category].append({'name': element.replace(' ', '<br>').replace('_', '<br>'),
+                                                             'y': user_loan_elements[category][element],
+                                                             'color': random.choice(colors)})
+    return user_loan_elements_transformed
+
 def get_user_loan_elements(user):
     url = 'http://api.kivaws.org/v1/lenders/{user}/loans.json'.format(user=user)
     response = requests.get(url)
     lender = eval(response.content.replace('false', 'False').replace('true', 'True'))
 
     # To speed up computing time, if a user has a ton of loans only use the 10 most recent.
-    if len(lender['loans']) > 15:
-        lender['loans'] = lender['loans'][-15:]
+    if len(lender['loans']) > max_loans:
+        lender['loans'] = lender['loans'][-max_loans:]
 
     # Make dictionaries of each of these important categories of the user's loans,
     # where the key is the category (ex. "Woman Owned Biz") and the value is the number
@@ -217,8 +241,8 @@ def main(user, number_displayed):
     user_loan_elements = get_user_loan_elements(user)
 
     # Find the similarity of every loan with the user's loans
-    similarity_scores = {k: jaccard_distance(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
-    #similarity_scores = {k: dp_similarity(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
+    #similarity_scores = {k: jaccard_distance(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
+    similarity_scores = {k: dp_similarity(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
 
     # Get list of tuples (loan_id, similarity_score) sorted by similarity score
     loans_to_display = sorted(similarity_scores.items(), key=lambda tup: tup[1], reverse=True)
@@ -227,4 +251,4 @@ def main(user, number_displayed):
     # Find details on the loans to be displayed
     loan_details_to_display = get_loan_details_from_api(loans_to_display)
 
-    return user_loan_elements, loan_details_to_display
+    return transform_for_pie_charts(user_loan_elements), loan_details_to_display
