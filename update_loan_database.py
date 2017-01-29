@@ -12,7 +12,7 @@ from utils import eval_string, get_date
 FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.INFO)
 
-MAX_LOANS = 5000
+MAX_LOANS = 10000
 
 # Extract a set of elements that we care about
 def get_loan_elements(k):
