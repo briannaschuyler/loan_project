@@ -7,8 +7,7 @@ import find_similar_loans
 from recommender import app
 from utils import set_to_string
 
-#logging.basicConfig(filename='usage.log', format='%(asctime)s %(message)s', level=logging.INFO)
-logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
+logging.basicConfig(filename='usage.log', format='%(asctime)s %(message)s', level=logging.INFO)
 
 @app.route('/')
 @app.route('/index')
