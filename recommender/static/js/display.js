@@ -3,7 +3,10 @@ $("#username_dne").hide()
 $("#find_username").hide()
 
 function findUsername() {
+  $("#username_dne").hide()
   $("#find_username").show()
+  $("#user_loans").hide()
+
 }
 
 function sendData( input_id ) {

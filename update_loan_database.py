@@ -9,8 +9,8 @@ from config import PATH
 from country import country_to_continent
 from utils import eval_string, get_date
 
-FORMAT = '%(asctime)-15s %(message)s'
-logging.basicConfig(format=FORMAT, level=logging.INFO)
+logging.basicConfig(filename='{}loan_update.log'.format(PATH),
+                    format='%(asctime)-15s %(message)s', level=logging.INFO)
 
 MAX_LOANS = 10000
 
