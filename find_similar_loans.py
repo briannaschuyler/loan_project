@@ -36,8 +36,9 @@ def transform_for_pie_charts(user_loan_elements):
     for category in categories:
         colors = categories[category]
         user_loan_elements_transformed[category] = []
-        i = 0
+        i = 5
         for element in user_loan_elements[category]:
+            i += 1
             user_loan_elements_transformed[category].append({'name': element.replace(' ', '<br>').replace('_', '<br>'),
                                                              'y': user_loan_elements[category][element],
                                                              'color': colors[i % len(colors)]})
