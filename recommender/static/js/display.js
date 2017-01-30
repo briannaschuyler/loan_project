@@ -94,3 +94,6 @@ function tableCreate( data ){
   $("#loan_table").append(tbl);
 }
 
+function notImplemented(){
+  alert("Ok, this function isn't currently implemented.  But it would be pretty cool, right?!");
+}
