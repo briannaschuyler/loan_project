@@ -84,8 +84,10 @@ function tableCreate( data ){
       var td = tr.insertCell();
       td.innerHTML = get_cell_value(i, j);
       td.style.border = '1px solid black';
+      td.style.textAlign = 'center';
       if(i == 0){
-        td.style.fill = 'black';
+        td.style.backgroundColor = 'black';
+        td.style.color = 'white';
       }
     }
   }
