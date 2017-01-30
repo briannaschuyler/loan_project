@@ -19,10 +19,10 @@ def index():
 def get_best_loans(username):
   logging.info('Username: %s' % username)
   number_displayed = 15
-  try:
-    user_loans, best_loans = find_similar_loans.main(username, number_displayed)
-  except:
-    return json.dumps([])
+  #try:
+  user_loans, best_loans = find_similar_loans.main(username, number_displayed)
+  #except:
+  #  return json.dumps([])
 
   return json.dumps([user_loans, best_loans])
 

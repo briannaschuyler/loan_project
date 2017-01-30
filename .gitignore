@@ -1,3 +1,4 @@
+config*
 old_files/
 .ipynb_checkpoints/
 data/kiva_*
