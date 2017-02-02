@@ -63,7 +63,7 @@ function tableCreate( data ){
   tbl  = document.createElement('table');
   tbl.style.width  = '100%';
   tbl.style.border = '1px solid black';
-  tbl.class = "table table-hover"
+  tbl.class = "table table-hover";
 
   //Create table header
   headers = [" ", "Loan Similarity<sup><a href='#fn2' id='ref2'>2</a></sup>", "Name of Borrower",

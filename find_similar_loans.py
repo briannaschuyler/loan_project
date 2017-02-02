@@ -1,3 +1,4 @@
+import math
 import pandas as pd
 import pickle
 import random
@@ -15,6 +16,8 @@ from utils import eval_string
 # To speed up computing time, if a user has had more than 50 loans only take
 # the 50 most recent
 max_loans = 50
+SIMILARITY = 'dp' # 'dp' or 'jaccard'
+NORMALIZE = 'sqrt' # None, 'sqrt' or 'random' to introduce random noise into results for more randomness
 
 def add_element(category, element):
     if element not in category:
@@ -120,16 +123,29 @@ def jaccard_distance(x, user_loan_elements):
 ###########################################################################
 
 def get_max_instance(user_loan_elements, category):
-    # Get the maximm number of instances of a particular category (country, continent, sector)
+    # Get the maximum number of instances of a particular category (country, continent, sector)
     instances = {v: k for k,v in user_loan_elements[category].iteritems()}
     return max(instances)
 
 def get_sum_of_instances(user_loan_elements, category):
-    # Get the maximm number of instances of a particular category (country, continent, sector)
+    # Get the sum of number of instances of a particular category (country, continent, sector)
     total_instances = 0
     for k in user_loan_elements[category]:
         total_instances += user_loan_elements[category][k]
     return total_instances
+
+def dot_product_plus_random_noise(user_loan_elements_set, k):
+    # Introduce an element of randomness so the user doesn't see 15 loans that are basically
+    # identical and the closest fit.  Pick a random number from zero to the true number and
+    # subtract it from the real number.
+    num_shared = user_loan_elements_set.get(k, 0)
+    noise = random.uniform(0, num_shared)
+    return num_shared - noise
+
+def dot_product_sqrt(user_loan_elements_set, k):
+    # Use the sqrt of the dp instead of the dp itself to give smaller numbers a fighting chance
+    num_shared = user_loan_elements_set.get(k, 0)
+    return math.sqrt(num_shared)
 
 def max_dp_similarity(user_loan_elements):
     # The maximum "similarity score" would be:
@@ -146,12 +162,25 @@ def dp_similarity(candidate_loan_elements, user_loan_elements):
     user_loan_elements_set = get_user_loan_elements_and_counts(user_loan_elements)
     candidate_loan_elements = list(candidate_loan_elements)
 
-    dot_product = sum([user_loan_elements_set.get(k, 0) for k in candidate_loan_elements])
+    # To get the best possible fits, just take the dot product of each loan's elements with
+    # the user's loan elements.
+    if NORMALIZE == 'random':
+        # To inject some randomness in choices, inject a bit of random noise
+        dot_product = sum([dot_product_plus_random_noise(user_loan_elements_set, k) for k in candidate_loan_elements])
+    elif NORMALIZE == 'sqrt':
+        dot_product = sum([dot_product_sqrt(user_loan_elements_set, k) for k in candidate_loan_elements])
+    elif NORMALIZE == None:
+        dot_product = sum([user_loan_elements_set.get(k, 0) for k in candidate_loan_elements])
+    else:
+        raise ValueError('NORMALIZE must be None, sqrt, or random')
 
     # Normalize by the maximum dot product of the most ideal loan (which is not the same as sharing
     # every element since a loan can in theory share all tags and themes but can only have one
     # country, continent, and sector
-    return dot_product * 1.0 / max_dp_similarity(user_loan_elements)
+    if dot_product > max_dp_similarity(user_loan_elements):
+        return 1.0
+    else:
+        return dot_product * 1.0 / max_dp_similarity(user_loan_elements)
 
 ###########################################################################
 # Find and display loans
@@ -243,8 +272,12 @@ def main(user, number_displayed):
     user_loan_elements = get_user_loan_elements(user)
 
     # Find the similarity of every loan with the user's loans
-    #similarity_scores = {k: jaccard_distance(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
-    similarity_scores = {k: dp_similarity(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
+    if SIMILARITY == 'jaccard':
+        similarity_scores = {k: jaccard_distance(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
+    elif SIMILARITY == 'dp':
+        similarity_scores = {k: dp_similarity(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
+    else:
+        raise ValueError('Similarity must be jaccard or dp')
 
     # Get list of tuples (loan_id, similarity_score) sorted by similarity score
     loans_to_display = sorted(similarity_scores.items(), key=lambda tup: tup[1], reverse=True)
