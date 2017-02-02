@@ -125,7 +125,12 @@ def jaccard_distance(x, user_loan_elements):
 def get_max_instance(user_loan_elements, category):
     # Get the maximum number of instances of a particular category (country, continent, sector)
     instances = {v: k for k,v in user_loan_elements[category].iteritems()}
-    return max(instances)
+    if NORMALIZE == 'sqrt':
+        return math.sqrt(max(instances))
+    elif NORMALIZE == None or NORMALIZE == 'random':
+        return max(instances)
+    else:
+        raise ValueError('NORMALIZE must be None, sqrt, or random')
 
 def get_sum_of_instances(user_loan_elements, category):
     # Get the sum of number of instances of a particular category (country, continent, sector)

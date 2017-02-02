@@ -60,7 +60,16 @@ function sendData( input_id ) {
 }
 
 function tableCreate( data ){
+
+  if ($('#loan_table').length > 0) {
+    // If the table already exists, remove the rows and create new ones specific to the most
+    // recent query.
+    $("#loan_table tr").remove();
+  }
+
+  //Create new table with details on best fit loans
   tbl  = document.createElement('table');
+  tbl.id = 'loan_table'
   tbl.style.width  = '100%';
   tbl.style.border = '1px solid black';
   tbl.class = "table table-hover";
@@ -123,7 +132,7 @@ function tableCreate( data ){
       }
     }
   }
-  $("#loan_table").append(tbl);
+  $("#loan_table_div").append(tbl);
 
   // Hide all of the "Why?" text in the validation measure
   for (var i = 0; i < data.length; i++){
