@@ -1,12 +1,29 @@
-$("#user_loans").hide()
-$("#username_dne").hide()
-$("#find_username").hide()
+$("#user_loans").hide();
+$("#username_dne").hide();
+$("#find_username").hide();
 
 function findUsername() {
-  $("#username_dne").hide()
-  $("#find_username").show()
-  $("#user_loans").hide()
+  $("#username_dne").hide();
+  $("#find_username").show();
+  $("#user_loans").hide();
 
+}
+
+function validateGood( loan_id ) {
+  $('#bad_'.concat(loan_id)).hide();
+  $('#why_'.concat(loan_id)).show();
+  $('#submit_'.concat(loan_id)).show();
+}
+
+function validateBad( loan_id ) {
+  $('#good_'.concat(loan_id)).hide();
+  $('#why_'.concat(loan_id)).show();
+  $('#submit_'.concat(loan_id)).show();
+}
+function submitValidation( loan_id ) {
+  $('#why_'.concat(loan_id)).hide();
+  $('#submit_'.concat(loan_id)).hide();
+  $('#thanks_'.concat(loan_id)).show();
 }
 
 function sendData( input_id ) {
@@ -57,21 +74,36 @@ function tableCreate( data ){
 
   function get_cell_value (i, j) {
 
+    if (i > 0) {
+      var loan_id = data[i-1]['loan_id']
+    }
     if(i == 0){
       return '<h6>'.concat(headers[j]).concat('</h6>')
     }
     else if(j == 0){
       img_link = '<a href="'.concat(data[i-1]['loan_link']).concat('"><img src="');
       img_link = img_link.concat(data[i-1]['loan_img']).concat('" alt=');
-      img_link = img_link.concat(data[i-1]['loan_id']).concat(' style="width:200px;">');
+      img_link = img_link.concat(loan_id).concat(' style="width:200px;">');
       return img_link
     }
     else if(j == 8) {
-      validation =  '<div class="btn-group-vertical">'
-      validation = validation.concat('<button type="button" class="btn btn-xs btn-success">Good Fit</button>');
-      validation = validation.concat('<button type="button" class="btn btn-xs btn-danger">Poor Fit</button>');
-      validation = validation.concat('</div><input type="text" name="validation" size="7" value="Why?">');
-      return validation
+      // Make Good/Bad loan validation buttons and text for explanation.  These results don't
+      // actually get saved anywhere right now, they're more of a proof of concept.
+      var goodFit = ['<button type="button" class="btn btn-xs btn-success" id="good_', loan_id,
+                     '" onclick="validateGood(', loan_id, ')">Good Fit</button>'].join('');
+
+      var badFit = ['<button type="button" class="btn btn-xs btn-danger" id="bad_', loan_id,
+                    '" onclick="validateBad(', loan_id, ')">Poor Fit</button>'].join('');
+
+      var expl = ['</div><input type="text" name="validation" size="7" id="why_', loan_id,
+                  '" value="Why?">'].join('');
+
+      var submitExpl = ['<button type="button" class="btn btn-xs btn-default" id="submit_', loan_id,
+                        '" onclick="submitValidation(', loan_id, ')">Submit</button>'].join('');
+
+      var thanks = ['<div id="thanks_', loan_id, '">Thanks!</div>'].join('');
+
+      return ['<div class="btn-group-vertical">', goodFit, badFit, expl, submitExpl, thanks].join('\n')
     }
     else {
       return data[i-1][rows[j]]
@@ -92,6 +124,13 @@ function tableCreate( data ){
     }
   }
   $("#loan_table").append(tbl);
+
+  // Hide all of the "Why?" text in the validation measure
+  for (var i = 0; i < data.length; i++){
+    $("#why_".concat(data[i]['loan_id'])).hide()
+    $("#submit_".concat(data[i]['loan_id'])).hide()
+    $("#thanks_".concat(data[i]['loan_id'])).hide()
+  }
 }
 
 function notImplemented(){
