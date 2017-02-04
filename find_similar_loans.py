@@ -50,7 +50,7 @@ def transform_for_pie_charts(user_loan_elements):
 def get_user_loan_elements(user):
     url = 'http://api.kivaws.org/v1/lenders/{user}/loans.json'.format(user=user)
     response = requests.get(url)
-    lender = eval(response.content.replace('false', 'False').replace('true', 'True'))
+    lender = eval(response.content.decode('utf8').replace('false', 'False').replace('true', 'True'))
 
     # To speed up computing time, if a user has a ton of loans only use the 10 most recent.
     if len(lender['loans']) > max_loans:
@@ -124,7 +124,7 @@ def jaccard_distance(x, user_loan_elements):
 
 def get_max_instance(user_loan_elements, category):
     # Get the maximum number of instances of a particular category (country, continent, sector)
-    instances = {v: k for k,v in user_loan_elements[category].iteritems()}
+    instances = {v: k for k,v in user_loan_elements[category].items()}
     if NORMALIZE == 'sqrt':
         return math.sqrt(max(instances))
     elif NORMALIZE == None or NORMALIZE == 'random':
@@ -207,9 +207,6 @@ def get_loans_to_display(loan_similarity, number_displayed):
 def get_percent(x):
     return str('%s%%' % int(round(x * 100)))
 
-def to_unicode(x):
-    return x.decode('unicode-escape')
-
 def get_loan_details_from_api(loans_to_display):
     url = 'http://api.kivaws.org/v1/loans/'
     for loan_sim in loans_to_display:
@@ -219,7 +216,7 @@ def get_loan_details_from_api(loans_to_display):
 
     # Get the details for the loans from the API
     response = requests.get(url)
-    loan = eval(response.content.replace('false', 'False').replace('true', 'True'))
+    loan = eval(response.content.decode('utf8').replace('false', 'False').replace('true', 'True'))
     loan_details = {}
 
     # Put the details into a dictionary with each loan id as a key
@@ -241,18 +238,17 @@ def get_loan_details_from_api(loans_to_display):
             loan_img = 'static/kiva.png'
 
         # Borrower details
-        borrower_name = to_unicode(loan_details[loan_id]['borrowers'][0]['first_name'])
+        borrower_name = loan_details[loan_id]['borrowers'][0]['first_name']
         if len(loan_details[loan_id]['borrowers']) > 1:
             gender = 'Group'
         else:
             gender = loan_details[loan_id]['borrowers'][0]['gender']
 
         # Loan details
-        country = to_unicode(loan_details[loan_id]['location']['country'])
-        continent = to_unicode(country_to_continent.get(country, 'Unknown'))
-        sector = to_unicode(loan_details[loan_id]['sector'])
-        text = to_unicode(loan_details[loan_id]['description']['texts']['en']).\
-                 replace('<br \/>', '\n\n')
+        country = loan_details[loan_id]['location']['country']
+        continent = country_to_continent.get(country, 'Unknown')
+        sector = loan_details[loan_id]['sector']
+        text = loan_details[loan_id]['description']['texts']['en'].replace('<br \/>', '\n\n')
 
         # Send details to website to display
         loan_details_to_display.append({'loan_id': loan_id,
@@ -278,9 +274,9 @@ def main(user, number_displayed):
 
     # Find the similarity of every loan with the user's loans
     if SIMILARITY == 'jaccard':
-        similarity_scores = {k: jaccard_distance(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
+        similarity_scores = {k: jaccard_distance(v['elements'], user_loan_elements) for k, v in loan_elements.items()}
     elif SIMILARITY == 'dp':
-        similarity_scores = {k: dp_similarity(v['elements'], user_loan_elements) for k, v in loan_elements.iteritems()}
+        similarity_scores = {k: dp_similarity(v['elements'], user_loan_elements) for k, v in loan_elements.items()}
     else:
         raise ValueError('Similarity must be jaccard or dp')
 
