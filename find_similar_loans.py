@@ -133,11 +133,14 @@ def get_max_instance(user_loan_elements, category):
         raise ValueError('NORMALIZE must be None, sqrt, or random')
 
 def get_sum_of_instances(user_loan_elements, category):
-    # Get the sum of number of instances of a particular category (country, continent, sector)
-    total_instances = 0
+    # Get the sum of number of instances of a particular category (tags, themes)
+    # Since the maximum number of tags and themes for any given loan is about 3,
+    # only take the top 3 instances
+    total_instances = []
     for k in user_loan_elements[category]:
-        total_instances += user_loan_elements[category][k]
-    return total_instances
+        total_instances.append(user_loan_elements[category][k])
+    total_instances.sort()
+    return sum(total_instances[-3:])
 
 def dot_product_plus_random_noise(user_loan_elements_set, k):
     # Introduce an element of randomness so the user doesn't see 15 loans that are basically
