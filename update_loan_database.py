@@ -32,7 +32,7 @@ def main():
   # Get the 500 most recent loans (the max I can get with this API call) with "fundraising" status
   url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&per_page=500'
   response = requests.get(url)
-  newest_loans = eval(response.content.replace('false', 'False').replace('true', 'True'))['loans']
+  newest_loans = eval(response.content.decode('utf8').replace('false', 'False').replace('true', 'True'))['loans']
 
   # Get a list of important elements for each loan
   loan_details = [get_loan_elements(k) for k in newest_loans]
