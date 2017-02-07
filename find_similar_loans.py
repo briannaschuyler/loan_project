@@ -252,6 +252,15 @@ def get_loan_details_from_api(loans_to_display):
         continent = country_to_continent.get(country, 'Unknown')
         sector = loan_details[loan_id]['sector']
         text = loan_details[loan_id]['description']['texts']['en'].replace('<br \/>', '\n\n')
+        if 'tags' in loan_details[loan_id]:
+            loan_tags = sorted([k['name'].strip('#') for k in loan_details[loan_id]['tags']])
+            tags = '<br>'.join(loan_tags)
+        else:
+            tags = ''
+        if 'themes' in loan_details[loan_id]:
+            themes = '<br>'.join(loan_details[loan_id]['themes'])
+        else:
+            themes = ''
 
         # Send details to website to display
         loan_details_to_display.append({'loan_id': loan_id,
@@ -263,6 +272,8 @@ def get_loan_details_from_api(loans_to_display):
                                         'country': country,
                                         'continent': continent,
                                         'sector': sector,
+                                        'tags': tags,
+					'themes': themes,
                                         'text': text
                                         })
     return loan_details_to_display

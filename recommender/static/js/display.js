@@ -76,10 +76,10 @@ function tableCreate( data ){
 
   //Create table header
   headers = [" ", "Loan Similarity<sup><a href='#fn2' id='ref2'>2</a></sup>", "Name of Borrower",
-             "Gender", "Country", "Continent", "Sector", "Description", "Validation Measure"]
+             "Gender", "Country", "Continent", "Sector", "Tags",  "Themes", "Description", "Validation Measure"]
 
   rows = {0: 'loan_link', 1: 'similarity', 2: 'borrower_name', 3: 'gender',
-          4: 'country', 5: 'continent', 6: 'sector', 7: 'text'}
+          4: 'country', 5: 'continent', 6: 'sector', 7: 'tags', 8: 'themes', 9: 'text'}
 
   function get_cell_value (i, j) {
 
@@ -95,7 +95,12 @@ function tableCreate( data ){
       img_link = img_link.concat(loan_id).concat(' style="width:200px;">');
       return img_link
     }
-    else if(j == 8) {
+    else if(j == 9) {
+      var description = ['<a href="#" data-toggle="tooltip" title="',
+                         data[i-1]['text'], '">Hover<br>For<br>Full<br>Description</a>'].join('');
+      return description
+    }
+    else if(j == 10) {
       // Make Good/Bad loan validation buttons and text for explanation.  These results don't
       // actually get saved anywhere right now, they're more of a proof of concept.
       var goodFit = ['<button type="button" class="btn btn-xs btn-success" id="good_', loan_id,
