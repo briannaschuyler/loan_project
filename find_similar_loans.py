@@ -138,7 +138,12 @@ def get_sum_of_instances(user_loan_elements, category):
     # only take the top 3 instances
     total_instances = []
     for k in user_loan_elements[category]:
-        total_instances.append(user_loan_elements[category][k])
+        if NORMALIZE == 'sqrt':
+            total_instances.append(math.sqrt(user_loan_elements[category][k]))
+        elif NORMALIZE == None or NORMALIZE == 'random':
+            total_instances.append(user_loan_elements[category][k])
+        else:
+            raise ValueError('NORMALIZE must be None, sqrt, or random')
     total_instances.sort()
     return sum(total_instances[-3:])
 
