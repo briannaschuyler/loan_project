@@ -75,7 +75,7 @@ function tableCreate( data ){
   tbl.class = "table table-hover";
 
   //Create table header
-  headers = [" ", "Loan Similarity<sup><a href='#fn2' id='ref2'>2</a></sup>", "Name of Borrower",
+  headers = [" ", "Loan Similarity<sup><a href='#fn2' id='ref2'>2</a></sup>", "Borrower(s)",
              "Gender", "Country", "Continent", "Sector", "Tags",  "Themes", "Description", "Validation Measure"]
 
   rows = {0: 'loan_link', 1: 'similarity', 2: 'borrower_name', 3: 'gender',

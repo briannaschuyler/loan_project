@@ -246,7 +246,10 @@ def get_loan_details_from_api(loans_to_display):
             loan_img = 'static/kiva.png'
 
         # Borrower details
-        borrower_name = loan_details[loan_id]['borrowers'][0]['first_name']
+        borrowers = [k['first_name'] for k in loan_details[loan_id]['borrowers']]
+        if len(borrowers) > 4:
+            borrowers = borrowers[:3] + ['and %s more' % str(len(borrowers) - 4)]
+        borrower_name = ',<br>'.join(borrowers)
         if len(loan_details[loan_id]['borrowers']) > 1:
             gender = 'Group'
         else:
@@ -254,7 +257,7 @@ def get_loan_details_from_api(loans_to_display):
 
         # Loan details
         country = loan_details[loan_id]['location']['country']
-        continent = country_to_continent.get(country, 'Unknown')
+        continent = country_to_continent.get(country, 'Unknown').replace('_', '<br>')
         sector = loan_details[loan_id]['sector']
         text = loan_details[loan_id]['description']['texts']['en'].replace('<br \/>', '\n\n')
         if 'tags' in loan_details[loan_id]:
@@ -278,7 +281,7 @@ def get_loan_details_from_api(loans_to_display):
                                         'continent': continent,
                                         'sector': sector,
                                         'tags': tags,
-					'themes': themes,
+                                        'themes': themes,
                                         'text': text
                                         })
     return loan_details_to_display
