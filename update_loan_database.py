@@ -12,7 +12,7 @@ from utils import eval_string, get_date
 logging.basicConfig(filename='{}loan_update.log'.format(PATH),
                     format='%(asctime)-15s %(message)s', level=logging.INFO)
 
-MAX_LOANS = 10000
+MAX_LOANS = 20000
 
 # Extract a set of elements that we care about
 def get_loan_elements(k):
