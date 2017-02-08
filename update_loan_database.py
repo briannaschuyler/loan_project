@@ -4,6 +4,7 @@ import pandas as pd
 import pickle
 from pprint import pprint
 import requests
+import time
 
 from config import PATH
 from country import country_to_continent
@@ -27,6 +28,35 @@ def get_loan_elements(k):
     loan_elements.update(k['themes'])
 
   return loan_elements
+
+def remove_funded_loans(loan_elements):
+  # Make a list of the current loans in loan elements and grab from the API to find out which ones are
+  # funded to remove them from the pile.
+  current_loans = list(loan_elements.keys())
+
+  for i in range(0, len(current_loans) + 1, 50):
+
+    # Construct the url to get details for 50 loans from the API
+    url = 'http://api.kivaws.org/v1/loans/'
+    for loan_id in current_loans[i: i + 50]:
+      url += '%s,' % loan_id
+    url = url[:-1] + '.json'
+
+    # Get the details for the 50 loans
+    response = requests.get(url)
+    loan = eval(response.content.decode('utf8').replace('false', 'False').replace('true', 'True'))
+
+    # Loop over the 50 loans and if any are funded, pop them out of the loan_elements_dictionary
+    for n in range(len(loan['loans'])):
+      if loan['loans'][n]['status'] == 'funded':
+        if loan['loans'][n]['id'] in loan_elements:
+          loan_elements.pop(loan['loans'][n]['id'])
+
+    # Sleep for 1 sec to not overload the API
+    time.sleep(1)
+
+  return loan_elements
+
 
 def main():
   # Get the 500 most recent loans (the max I can get with this API call) with "fundraising" status
@@ -56,17 +86,24 @@ def main():
   else:
     logging.info('Number of loans is %s, which exceeds max of %s.  No new loans have been added.' %
             (len(loan_elements), MAX_LOANS))
+
   # Remove all expired loans
-  num_removed = 0
+  num_removed_expired = 0
   for loan_id in loan_elements.keys():
     if loan_elements[loan_id]['expired_at'] < datetime.today().date():
       loan_elements.pop(loan_id)
-      num_removed +=1
+      num_removed_expired +=1
+  logging.info('%s loans removed due to expiration' % num_removed_expired)
+
+  # Remove all funded loans
+  num_loans = len(loan_elements)
+  loan_elements_unfunded = remove_funded_loans(loan_elements)
+  num_removed_funded = num_loans - len(loan_elements_unfunded)
 
   # Save the updated dictionary with elements of currently available loans.
-  logging.info('%s loans removed due to expiration' % num_removed)
-  logging.info('%s loans in current record' % len(loan_elements))
-  pickle.dump(loan_elements, open( "%sloan_elements.pickle" % PATH, "wb" ))
+  logging.info('%s loans removed due to being funded' % num_removed_funded)
+  logging.info('%s loans in current record' % len(loan_elements_unfunded))
+  pickle.dump(loan_elements_unfunded, open( "%sloan_elements.pickle" % PATH, "wb" ))
 
 if __name__ == "__main__":
   main()
