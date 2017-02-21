@@ -60,6 +60,7 @@ def remove_funded_loans(loan_elements):
 
 def main():
   # Get the 500 most recent loans (the max I can get with this API call) with "fundraising" status
+  logging.info('Accessing 500 most recent loans')
   url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&per_page=500'
   response = requests.get(url)
   newest_loans = eval(response.content.decode('utf8').replace('false', 'False').replace('true', 'True'))['loans']
@@ -89,7 +90,8 @@ def main():
 
   # Remove all expired loans
   num_removed_expired = 0
-  for loan_id in loan_elements.keys():
+  loan_ids = loan_elements.copy().keys()
+  for loan_id in loan_ids:
     if loan_elements[loan_id]['expired_at'] < datetime.today().date():
       loan_elements.pop(loan_id)
       num_removed_expired +=1

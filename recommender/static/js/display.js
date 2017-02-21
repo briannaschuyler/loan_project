@@ -90,7 +90,7 @@ function tableCreate( data ){
       return '<h6>'.concat(headers[j]).concat('</h6>')
     }
     else if(j == 0){
-      img_link = '<a href="'.concat(data[i-1]['loan_link']).concat('"><img src="');
+      img_link = '<a href="'.concat(data[i-1]['loan_link']).concat('" target="_blank"><img src="');
       img_link = img_link.concat(data[i-1]['loan_img']).concat('" alt=');
       img_link = img_link.concat(loan_id).concat(' style="width:200px;">');
       return img_link
